@@ -17,8 +17,10 @@ app.get('/', (req, res) => res.json({ status: 'Nervless proxy running' }));
 app.post('/transcribe', upload.single('file'), async (req, res) => {
   try {
     const form = new FormData();
+    const isMP4 = req.file.mimetype && req.file.mimetype.includes('mp4');
+    const filename = isMP4 ? 'recording.mp4' : 'recording.webm';
     form.append('file', req.file.buffer, {
-      filename: 'recording.webm',
+      filename,
       contentType: req.file.mimetype || 'audio/webm'
     });
     form.append('model', 'whisper-1');
